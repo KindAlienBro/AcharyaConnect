@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - AcharyaConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #001f3f;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: #002b5b;
+      padding: 40px;
+      border-radius: 25px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffa500;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: none;
+    }
+
+    button {
+      width: 100%;
+      background-color: #ff9900;
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e67e00;
+    }
+
+    .guest-btn {
+      margin-top: 15px;
+      background-color: transparent;
+      color: #ffa500;
+      border: 2px solid #ffa500;
+    }
+
+    .guest-btn:hover {
+      background-color: #ffa500;
+      color: #fff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="login-container">
+    <h2>Login to AcharyaConnect</h2>
+    <form action="login.php" method="POST">
+      <label for="auid">AUID</label>
+      <input type="text" id="auid" name="auid" required placeholder="Enter your AUID" />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required placeholder="Enter your password" />
+
+      <button type="submit">Login</button>
+    </form>
+
+    <button class="guest-btn" onclick="showGuestForm()">Continue as Guest</button>
+  </div>
+
+  <div class="container hidden" id="guest-container">
+    <h2>Guest Access</h2>
+    <form id="guestForm" action="guest_register.php" method="POST">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required placeholder="Enter your name" />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required placeholder="Enter your email" />
+
+      <label for="password_guest">Password</label>
+      <input type="password" id="password_guest" name="password" required placeholder="Enter password" />
+
+      <label for="confirm_password">Confirm Password</label>
+      <input type="password" name="confirm" id="confirm" placeholder="Confirm Password" required />
+
+
+      <button type="submit">Register</button>
+    </form>
+  </div>
+
+  <script>
+    function showGuestForm() {
+      document.getElementById('login-container').classList.add('hidden');
+      document.getElementById('guest-container').classList.remove('hidden');
+    }
+
+    // Password validation
+    document.getElementById('guestForm').addEventListener('submit', function(e) {
+      const pwd = document.getElementById('password_guest').value;
+      const cpwd = document.getElementById('confirm_password').value;
+
+      if (pwd !== cpwd) {
+        e.preventDefault();
+        alert("Passwords do not match!");
+      }
+    });
+  </script>
+
+</body>
+</html>
