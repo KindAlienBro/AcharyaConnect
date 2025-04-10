@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - AcharyaConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #001f3f;
+      color: white;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      border-radius: 30px;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .left-section {
+      flex: 1;
+      position: relative;
+      background: linear-gradient(145deg, #fefefe, #ffffff);
+      border-top-left-radius: 30px;
+      border-bottom-left-radius: 30px;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+      border-top-left-radius: 30px;
+      border-bottom-left-radius: 30px;
+    }
+
+    .right-section {
+      flex: 1;
+      background-color: #002b5b;
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-top-right-radius: 30px;
+      border-bottom-right-radius: 30px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #ffa500;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .key-features {
+      margin-top: 30px;
+    }
+
+    .key-features h2 {
+      color: #ffa500;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .key-features ul {
+      padding-left: 20px;
+    }
+
+    .key-features li {
+      margin-bottom: 10px;
+    }
+
+    .cta-button {
+      background-color: #ff9900;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 30px;
+      transition: background 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      margin-top: 30px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+      width: fit-content;
+    }
+
+    .cta-button:hover {
+      background-color: #e67e00;
+    }
+
+    .cta-button i {
+      margin-left: 8px;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .left-section,
+      .right-section {
+        flex: none;
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+      }
+
+      canvas {
+        border-radius: 0;
+      }
+
+      .right-section {
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+        padding: 30px 20px;
+        text-align: center;
+      }
+
+      .cta-button {
+        margin: 20px auto 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Logo Animation Left Side -->
+    <div class="left-section">
+      <canvas id="logoCanvas"></canvas>
+    </div>
+
+    <!-- About Content Right Side -->
+    <div class="right-section">
+      <h1>About AcharyaConnect</h1>
+      <p>
+        AcharyaConnect is a task management system designed specifically for colleges to streamline task delegation and tracking among Principals, HODs, and Assistant Professors. It enables real-time updates, accountability, and smooth communication across departments.
+      </p>
+      <div class="key-features">
+        <h2>Key Features</h2>
+        <ul>
+          <li>Task delegation based on hierarchy</li>
+          <li>Real-time completion tracking</li>
+          <li>User roles and responsibilities</li>
+          <li>Modern, responsive interface</li>
+        </ul>
+      </div>
+      <a href="login.html" class="cta-button">
+        Get Started <i>&rarr;</i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Three.js Logo Animation -->
+  <script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / 2 / window.innerHeight,
+      0.1,
+      1000
+    );
+    const renderer = new THREE.WebGLRenderer({ alpha: true, canvas: document.getElementById('logoCanvas') });
+    renderer.setSize(window.innerWidth / 2, window.innerHeight);
+    const loader = new THREE.TextureLoader();
+
+    loader.load('image.png', function (texture) {
+      const geometry = new THREE.PlaneGeometry(3, 3);
+      const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+      const plane = new THREE.Mesh(geometry, material);
+      scene.add(plane);
+
+      camera.position.z = 5;
+
+      function animate() {
+        requestAnimationFrame(animate);
+        plane.rotation.y += 0.01;
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    });
+
+    window.addEventListener('resize', () => {
+      const aspectRatio = window.innerWidth > 768 ? window.innerWidth / 2 / window.innerHeight : window.innerWidth / window.innerHeight;
+      camera.aspect = aspectRatio;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth > 768 ? window.innerWidth / 2 : window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
