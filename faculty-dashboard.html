@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Faculty Dashboard - AcharyaConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+            color: #003366;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .dashboard-container {
+            max-width: 1000px;
+            margin: auto;
+            background: #f0f8ff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        
+        .dark-mode .dashboard-container {
+            background: #1e1e1e;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+        }
+        
+        .dark-mode .task-card {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+        }
+        
+        .dark-mode .task-card.completed {
+            background-color: #1e3a5f;
+        }
+        
+        .dark-mode .task-card button {
+            background-color: #3f51b5;
+            color: white;
+        }
+        
+        .dark-mode .discard-btn {
+            background-color: #ff9800;
+        }
+        
+        .dark-mode .task-card button:hover {
+            background-color: #303f9f;
+        }
+        
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .profile-section img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .profile-details h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .auid-badge {
+            background-color: #0000cd;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .role-label {
+            background-color: #0000cd;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+        
+        .department-label {
+            background-color: #ffa500;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+            color: #00008b;
+        }
+        
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .task-card {
+            background-color: #ffffff;
+            border-left: 6px solid #ffa500;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: background 0.3s;
+            position: relative;
+        }
+        
+        .task-card.completed {
+            border-color: #0000cd;
+            background-color: #e6f0ff;
+        }
+        
+        .task-card h3 {
+            margin-bottom: 10px;
+        }
+        
+        .task-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .task-due {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .task-card button {
+            background-color: #0000cd;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: 0.3s;
+        }
+        
+        .task-card button:hover {
+            background-color: #00008b;
+        }
+        
+        .completed-label {
+            color: #0000cd;
+            font-weight: 600;
+        }
+        
+        .discard-btn {
+            background-color: #ffa500;
+        }
+        
+        .discard-btn:hover {
+            background-color: #cc8400;
+        }
+        
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #000;
+            transition: color 0.3s;
+        }
+        
+        .dark-mode .dark-mode-toggle {
+            color: #fff;
+        }
+        
+        .dark-mode h2,
+        .dark-mode .profile-details h2 {
+            color: #90caf9;
+        }
+        
+        .dark-mode .completed-label {
+            color: #90caf9;
+        }
+        
+        .collaborators-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .collaborators-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #00008b;
+            display: flex;
+            align-items: center;
+        }
+        
+        .dash {
+            margin-left: 5px;
+            color: #ffa500;
+        }
+        
+        .dark-mode .collaborators-label {
+            color: #90caf9;
+        }
+        
+        .dark-mode .dash {
+            color: #ffb74d;
+        }
+        
+        .collaborators {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .collaborator-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            margin-left: -12px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .collaborator-img:first-child {
+            margin-left: 0;
+        }
+        
+        .collaborator-img:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+        
+        .collaborators-count {
+            background-color: #0000cd;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-left: -12px;
+            border: 2px solid white;
+            position: relative;
+        }
+        
+        .dark-mode .collaborators-count {
+            background-color: #3f51b5;
+        }
+        
+        .task-desc {
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        /* Chat button */
+        
+        .chat-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .chat-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+        }
+        
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-right: 40px;
+        }
+        /* Chat box */
+        
+        #chatBox {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 350px;
+            height: 100%;
+            background: #ffffff;
+            border-left: 2px solid #ccc;
+            display: none;
+            flex-direction: column;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+        }
+        
+        .dark-mode #chatBox {
+            background: #1e1e1e;
+            border-color: #333;
+            color: #e0e0e0;
+        }
+        
+        .chat-header {
+            background: #0000cd;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-right-radius: 8px;
+        }
+        
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            margin-bottom: 5px;
+            word-wrap: break-word;
+        }
+        
+        .sent {
+            align-self: flex-end;
+            background-color: #DCF8C6;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .dark-mode .sent {
+            background-color: #4a5d3e;
+            color: #e0e0e0;
+        }
+        
+        .received {
+            align-self: flex-start;
+            background-color: #ECECEC;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .dark-mode .received {
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+        }
+        
+        .message-time {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 3px;
+            text-align: right;
+        }
+        
+        .dark-mode .message-time {
+            color: #aaa;
+        }
+        
+        .chat-input-container {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-top: 1px solid #ccc;
+        }
+        
+        .chat-input-row {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+        
+        .dark-mode .chat-input {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        
+        .send-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background: #0000cd;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .send-btn:hover {
+            background: #00008b;
+        }
+        
+        .file-input-btn {
+            background: transparent;
+            border: none;
+            color: #0000cd;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0 10px;
+        }
+        
+        .dark-mode .file-input-btn {
+            color: #90caf9;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .media-preview {
+            display: flex;
+            gap: 10px;
+            padding: 5px;
+            overflow-x: auto;
+        }
+        
+        .media-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .media-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .remove-media {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+        
+        .file-icon {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f0f0;
+        }
+        
+        .dark-mode .file-icon {
+            background: #3a3a3a;
+        }
+        
+        .file-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+
+        <div class="profile-section">
+            <img src="faculty.jpg" alt="Faculty Photo" />
+            <div class="profile-details">
+                <h2>Prof. Meera</h2>
+                <div class="auid-badge">AUID: AITF0012</div>
+                <div class="department-label">AIML</div>
+                <span class="role-label">Lecturer</span>
+            </div>
+        </div>
+
+        <h2>Assigned Tasks</h2>
+        <div class="task-list" id="taskList"></div>
+    </div>
+
+    <div id="chatBox"></div>
+
+    <script>
+        let facultyTasks = [{
+            id: 1,
+            title: "Prepare syllabus for next semester",
+            due: "2025-04-16",
+            status: "pending",
+            description: "Outline and compile topics and reading materials for the next academic session.",
+            collaborators: [{
+                name: "Dr. Smith",
+                photo: "https://randomuser.me/api/portraits/men/32.jpg"
+            }, {
+                name: "Prof. Johnson",
+                photo: "https://randomuser.me/api/portraits/women/44.jpg"
+            }, {
+                name: "Dr. Williams",
+                photo: "https://randomuser.me/api/portraits/men/22.jpg"
+            }]
+        }, {
+            id: 2,
+            title: "Submit lab reports summary",
+            due: "2025-04-12",
+            status: "completed",
+            description: "Compile all lab report evaluations into a single document and submit to HOD.",
+            collaborators: [{
+                name: "Prof. Brown",
+                photo: "https://randomuser.me/api/portraits/women/65.jpg"
+            }, {
+                name: "Dr. Davis",
+                photo: "https://randomuser.me/api/portraits/men/75.jpg"
+            }]
+        }, {
+            id: 3,
+            title: "Update student attendance",
+            due: "2025-04-18",
+            status: "pending",
+            description: "Ensure all attendance records are updated for the current semester.",
+            collaborators: [{
+                name: "Prof. Miller",
+                photo: "https://randomuser.me/api/portraits/women/33.jpg"
+            }, {
+                name: "Dr. Wilson",
+                photo: "https://randomuser.me/api/portraits/men/55.jpg"
+            }, {
+                name: "Prof. Moore",
+                photo: "https://randomuser.me/api/portraits/women/22.jpg"
+            }, {
+                name: "Dr. Taylor",
+                photo: "https://randomuser.me/api/portraits/men/45.jpg"
+            }, {
+                name: "Dr. Anderson",
+                photo: "https://randomuser.me/api/portraits/women/63.jpg"
+            }]
+        }];
+
+        let currentTaskId = null;
+        let mediaFiles = [];
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+
+            facultyTasks.forEach(task => {
+                        const card = document.createElement('div');
+                        card.className = `task-card ${task.status === 'completed' ? 'completed' : ''}`;
+
+                        let collaboratorsHTML = '';
+                        const maxVisible = 3;
+                        const visible = task.collaborators.slice(0, maxVisible);
+                        const extra = task.collaborators.length - maxVisible;
+
+                        collaboratorsHTML += `
+          <div class="collaborators-container">
+            <span class="collaborators-label">Collaborators <span class="dash">:</span></span>
+            <div class="collaborators">
+        `;
+                        visible.forEach((collab, i) => {
+                            const z = maxVisible - i;
+                            collaboratorsHTML += `<img src="${collab.photo}" alt="${collab.name}" class="collaborator-img" style="z-index:${z};" title="${collab.name}">`;
+                        });
+                        if (extra > 0) {
+                            collaboratorsHTML += `<div class="collaborators-count" style="z-index:1;" title="${extra} more collaborators">+${extra}</div>`;
+                        }
+                        collaboratorsHTML += `</div></div>`;
+
+                        card.innerHTML = `
+          <h3>${task.title}</h3>
+          <button onclick="toggleDescription(${task.id})">▼ Description</button>
+          <div class="task-desc" id="desc-${task.id}" style="display: none;">${task.description}</div>
+          ${collaboratorsHTML}
+          <div class="task-meta">
+            <div class="task-due">Due: ${task.due}</div>
+            <div class="action-buttons">
+              ${task.status === 'pending'
+                ? `<button onclick="markCompleted(${task.id})">Mark as Completed</button>`
+                : `<div><span class="completed-label">✅ Completed</span>
+                    <button class="discard-btn" onclick="undoCompletion(${task.id})">Undo</button></div>`}
+              <button class="chat-btn" onclick="openChat(${task.id})">
+                <i class="fas fa-comment"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        taskList.appendChild(card);
+      });
+    }
+
+    function toggleDescription(id) {
+      const desc = document.getElementById(`desc-${id}`);
+      desc.style.display = desc.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function markCompleted(id) {
+      const task = facultyTasks.find(t => t.id === id);
+      if (task) {
+        task.status = 'completed';
+        renderTasks();
+        alert("Task marked as completed!");
+      }
+    }
+
+    function undoCompletion(id) {
+      const task = facultyTasks.find(t => t.id === id);
+      if (task) {
+        task.status = 'pending';
+        renderTasks();
+        alert("Completion undone!");
+      }
+    }
+
+    function openChat(taskId) {
+      currentTaskId = taskId;
+      mediaFiles = [];
+      const task = facultyTasks.find(t => t.id === taskId);
+      const chatBox = document.getElementById('chatBox');
+      chatBox.innerHTML = `
+        <div class="chat-header">
+          <strong>Chat - ${task.title}</strong>
+          <button onclick="closeChat()">✖</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+          <div class="message received">
+            Hello, how can I help you with "${task.title}"?
+            <div class="message-time">${formatTime(new Date())}</div>
+          </div>
+        </div>
+        <div class="chat-input-container">
+          <div class="media-preview" id="mediaPreview"></div>
+          <div class="chat-input-row">
+            <button class="file-input-btn" title="Attach file">
+              <i class="fas fa-paperclip"></i>
+              <input type="file" class="file-input" id="fileInput" multiple onchange="handleFileSelect(event)">
+            </button>
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type a message..." onkeypress="handleKeyPress(event)"/>
+            <button class="send-btn" onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+      `;
+      chatBox.style.display = 'flex';
+      document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
+    }
+
+    function closeChat() {
+      document.getElementById('chatBox').style.display = 'none';
+      currentTaskId = null;
+      mediaFiles = [];
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      
+      if (!message && mediaFiles.length === 0) return;
+
+      const chatBody = document.getElementById('chatBody');
+      const now = new Date();
+
+      if (message) {
+        const msg = document.createElement('div');
+        msg.className = 'message sent';
+        msg.innerHTML = `
+          ${message}
+          <div class="message-time">${formatTime(now)}</div>
+        `;
+        chatBody.appendChild(msg);
+        input.value = '';
+      }
+
+      if (mediaFiles.length > 0) {
+        mediaFiles.forEach(file => {
+          const msg = document.createElement('div');
+          msg.className = 'message sent';
+          
+          if (file.type.startsWith('image/')) {
+            msg.innerHTML = `
+              <img src="${URL.createObjectURL(file)}" style="max-width: 100%; border-radius: 8px;" alt="Sent image">
+              <div class="message-time">${formatTime(now)}</div>
+            `;
+          } else {
+            msg.innerHTML = `
+              <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #f0f0f0; border-radius: 8px;">
+                <i class="fas fa-file" style="font-size: 24px;"></i>
+                <div>
+                  <div style="font-weight: bold;">${file.name}</div>
+                  <div style="font-size: 0.8rem;">${formatFileSize(file.size)}</div>
+                </div>
+              </div>
+              <div class="message-time">${formatTime(now)}</div>
+            `;
+          }
+          chatBody.appendChild(msg);
+        });
+        
+        mediaFiles = [];
+        document.getElementById('mediaPreview').innerHTML = '';
+      }
+
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function handleFileSelect(event) {
+      const files = event.target.files;
+      const mediaPreview = document.getElementById('mediaPreview');
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        mediaFiles.push(file);
+        
+        const mediaItem = document.createElement('div');
+        mediaItem.className = 'media-item';
+        
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            mediaItem.innerHTML = `
+              <img src="${e.target.result}" alt="Preview">
+              <button class="remove-media" onclick="removeMedia(${mediaFiles.length - 1})">×</button>
+            `;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          mediaItem.innerHTML = `
+            <div class="file-icon">
+              <i class="fas fa-file"></i>
+              <div class="file-name">${file.name}</div>
+              <button class="remove-media" onclick="removeMedia(${mediaFiles.length - 1})">×</button>
+            </div>
+          `;
+        }
+        
+        mediaPreview.appendChild(mediaItem);
+      }
+      
+      // Reset file input to allow selecting the same file again
+      event.target.value = '';
+    }
+
+    function removeMedia(index) {
+      mediaFiles.splice(index, 1);
+      const mediaPreview = document.getElementById('mediaPreview');
+      mediaPreview.innerHTML = '';
+      
+      // Re-render remaining media files
+      mediaFiles.forEach((file, i) => {
+        const mediaItem = document.createElement('div');
+        mediaItem.className = 'media-item';
+        
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            mediaItem.innerHTML = `
+              <img src="${e.target.result}" alt="Preview">
+              <button class="remove-media" onclick="removeMedia(${i})">×</button>
+            `;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          mediaItem.innerHTML = `
+            <div class="file-icon">
+              <i class="fas fa-file"></i>
+              <div class="file-name">${file.name}</div>
+              <button class="remove-media" onclick="removeMedia(${i})">×</button>
+            </div>
+          `;
+        }
+        
+        mediaPreview.appendChild(mediaItem);
+      });
+    }
+
+    function formatTime(date) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    }
+
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+    }
+
+    renderTasks();
+    </script>
+</body>
+
+</html>
